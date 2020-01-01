@@ -10,12 +10,12 @@ import java.io.File;
 
 @Getter
 public class HibernateConfig {
-    private final String configFileName;
+    private final File configFile;
     private final SessionFactory sessionFactory;
 
-    HibernateConfig(@NonNull String configFileName) throws ExceptionInInitializerError {
-        this.configFileName = configFileName;
-        this.sessionFactory = buildSessionFactory(configFileName);
+    HibernateConfig(@NonNull File configFile) throws ExceptionInInitializerError {
+        this.configFile = configFile;
+        this.sessionFactory = buildSessionFactory(configFile);
     }
 
     public Session openSession() {
@@ -27,11 +27,10 @@ public class HibernateConfig {
         getSessionFactory().close();
     }
 
-    private static SessionFactory buildSessionFactory(@NonNull String configFileName) {
+    private static SessionFactory buildSessionFactory(@NonNull File configFile) {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
-            return new AnnotationConfiguration().configure(
-                    new File(configFileName)).buildSessionFactory();
+            return new AnnotationConfiguration().configure(configFile).buildSessionFactory();
 
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
