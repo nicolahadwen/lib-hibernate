@@ -2,6 +2,7 @@ package co.hadwen.hibernate;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
@@ -12,14 +13,13 @@ public class HibernateConfig {
     private final String configFileName;
     private final SessionFactory sessionFactory;
 
-    private HibernateConfig() throws ExceptionInInitializerError {
-        this.configFileName = "hibernate.cfg.xml";
-        this.sessionFactory = buildSessionFactory();
+    HibernateConfig(@NonNull String configFileName) throws ExceptionInInitializerError {
+        this.configFileName = configFileName;
+        this.sessionFactory = buildSessionFactory(configFileName);
     }
 
-    private HibernateConfig(@NonNull String configFileName) throws ExceptionInInitializerError {
-        this.configFileName = configFileName;
-        this.sessionFactory = buildSessionFactory();
+    public Session openSession() {
+        return sessionFactory.openSession();
     }
 
     public void shutdown() {
@@ -27,20 +27,11 @@ public class HibernateConfig {
         getSessionFactory().close();
     }
 
-    public static HibernateConfig create() {
-        return new HibernateConfig();
-    }
-
-    public static HibernateConfig create(@NonNull String lombok) {
-        return new HibernateConfig(lombok);
-    }
-
-
-    private static SessionFactory buildSessionFactory() {
+    private static SessionFactory buildSessionFactory(@NonNull String configFileName) {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
             return new AnnotationConfiguration().configure(
-                    new File("hibernate.cfg.xml")).buildSessionFactory();
+                    new File(configFileName)).buildSessionFactory();
 
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
