@@ -29,10 +29,12 @@ public class HibernateSessionFactory {
         try {
             return configuration.buildSessionFactory();
 
-        } catch (Throwable ex) {
+        } catch (Exception e) {
             // Make sure you log the exception, as it might be swallowed
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
+            System.err.println("Initial SessionFactory creation failed." + e.getMessage());
+            System.err.println("Reason" + e.getCause().getLocalizedMessage());
+
+            throw new ExceptionInInitializerError(e.getMessage());
         }
     }
 }
