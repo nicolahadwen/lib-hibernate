@@ -33,7 +33,7 @@ public class Encryption {
         }
     }
 
-    public boolean verifyPassword(String password, String encryptedPassphrase) {
+    public boolean verifyPassword(String encryptedPassphrase, String password) {
         String[] splited = encryptedPassphrase.split(ENCRYPTION_SEPARATOR_REGEX);
         if(splited.length != 2) {
             throw new RuntimeException(

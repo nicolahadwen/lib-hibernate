@@ -14,13 +14,13 @@ public class EncryptionTest {
         Encryption encryption = new Encryption();
         String encrypted = encryption.encryptPassword(PASSWORD);
         System.out.println(encrypted);
-        assertTrue(encryption.verifyPassword(PASSWORD, encrypted));
+        assertTrue(encryption.verifyPassword(encrypted, PASSWORD));
     }
 
     @Test
     public void encryptAndDecryptPassword_DoesNotMatch() {
         Encryption encryption = new Encryption();
         String encrypted = encryption.encryptPassword(PASSWORD);
-        assertFalse(encryption.verifyPassword(PASSWORD + Encryption.ENCRYPTION_SEPARATOR, encrypted));
+        assertFalse(encryption.verifyPassword(encrypted, PASSWORD + Encryption.ENCRYPTION_SEPARATOR));
     }
 }
